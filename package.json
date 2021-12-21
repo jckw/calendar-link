@@ -1,7 +1,7 @@
 {
-  "name": "calendar-link",
-  "version": "2.1.1",
-  "description": "📅 Calendar link generator for popular services, like Google, Outlook, and Yahoo.",
+  "name": "calendar-link-recur",
+  "version": "3.0.0",
+  "description": "Generate recurring event links from Google and iCal",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
@@ -20,28 +20,25 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "coverage": "jest --coverage",
-    "update-template": "npx update-template https://github.com/AnandChowdhary/calendar-link",
+    "update-template": "npx update-template https://github.com/jckw/calendar-link-recur",
     "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnandChowdhary/calendar-link.git"
+    "url": "git+https://github.com/jckw/calendar-link-recur.git"
   },
   "keywords": [
     "nodejs",
     "typescript",
     "calendar",
     "calendar-link",
-    "google-calendar",
-    "outlook",
-    "yahoo"
+    "google-calendar"
   ],
-  "author": "Anand Chowdhary <mail@anandchowdhary.com>",
+  "author": "Jack Weatherilt <jackweatherilt@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AnandChowdhary/calendar-link/issues"
+    "url": "https://github.com/jckw/calendar-link-recur/issues"
   },
-  "homepage": "https://anandchowdhary.github.io/calendar-link/",
   "devDependencies": {
     "@koj/config": "1.2.11",
     "@semantic-release/changelog": "^5.0.1",
