@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { stringify } from "query-string";
 
-import { CalendarEvent, NormalizedCalendarEvent, Google, Outlook, Yahoo } from "./interfaces";
+import { CalendarEvent, NormalizedCalendarEvent, Google } from "./interfaces";
 import { TimeFormats } from "./utils";
 
 dayjs.extend(utc);
@@ -13,6 +13,10 @@ function formatTimes(
 ): { start: string; end: string } {
   const format = TimeFormats[dateTimeFormat];
   return { start: startUtc.format(format), end: endUtc.format(format) };
+}
+
+function formatRecur(recur: CalendarEvent["recur"]) {
+  return recur ? `FREQ=${recur.toUpperCase()}` : undefined;
 }
 
 export const eventify = (event: CalendarEvent): NormalizedCalendarEvent => {
@@ -48,57 +52,12 @@ export const google = (calendarEvent: CalendarEvent): string => {
     location: event.location,
     trp: event.busy,
     dates: start + "/" + end,
+    recur: event.recur ? `RRULE:${formatRecur(event.recur)}` : undefined,
   };
   if (event.guests && event.guests.length) {
     details.add = event.guests.join();
   }
   return `https://calendar.google.com/calendar/render?${stringify(details)}`;
-};
-
-export const outlook = (calendarEvent: CalendarEvent): string => {
-  const event = eventify(calendarEvent);
-  const { start, end } = formatTimes(event, "dateTimeWithOffset");
-  const details: Outlook = {
-    path: "/calendar/action/compose",
-    rru: "addevent",
-    startdt: start,
-    enddt: end,
-    subject: event.title,
-    body: event.description,
-    location: event.location,
-    allday: event.allDay || false
-  };
-  return `https://outlook.live.com/calendar/0/deeplink/compose?${stringify(details)}`;
-};
-
-export const office365 = (calendarEvent: CalendarEvent): string => {
-  const event = eventify(calendarEvent);
-  const { start, end } = formatTimes(event, "dateTimeWithOffset");
-  const details: Outlook = {
-    path: "/calendar/action/compose",
-    rru: "addevent",
-    startdt: start,
-    enddt: end,
-    subject: event.title,
-    body: event.description,
-    location: event.location,
-    allday: event.allDay || false
-  };
-  return `https://outlook.office.com/calendar/0/deeplink/compose?${stringify(details)}`;
-};
-
-export const yahoo = (calendarEvent: CalendarEvent): string => {
-  const event = eventify(calendarEvent);
-  const { start, end } = formatTimes(event, event.allDay ? "allDay" : "dateTimeUTC");
-  const details: Yahoo = {
-    v: 60,
-    title: event.title,
-    st: start,
-    et: end,
-    desc: event.description,
-    in_loc: event.location,
-  };
-  return `https://calendar.yahoo.com/?${stringify(details)}`;
 };
 
 export const ics = (calendarEvent: CalendarEvent): string => {
@@ -152,6 +111,10 @@ export const ics = (calendarEvent: CalendarEvent): string => {
     {
       key: "LOCATION",
       value: formattedLocation,
+    },
+    {
+      key: "RRULE",
+      value: formatRecur(event.recur),
     },
     {
       key: "END",

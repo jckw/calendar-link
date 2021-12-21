@@ -11,6 +11,7 @@ interface CalendarEvent {
   busy?: boolean;
   guests?: string[];
   url?: string;
+  recur?: "daily" | "weekly" | "monthly" | "yearly";
 }
 
 interface NormalizedCalendarEvent extends Omit<CalendarEvent, "start" | "end" | "duration"> {
@@ -31,24 +32,4 @@ interface Google extends Record<string, string | boolean | number | undefined> {
   recur?: string;
 }
 
-interface Outlook extends Record<string, string | boolean | number | undefined> {
-  path: string;
-  rru: string;
-  startdt: string;
-  enddt: string;
-  subject: string;
-  allday?: boolean;
-  body?: string;
-  location?: string;
-}
-
-interface Yahoo extends Record<string, string | boolean | number | undefined> {
-  v: number;
-  title: string;
-  st: string;
-  et: string;
-  desc?: string;
-  in_loc?: string;
-}
-
-export { CalendarEvent, NormalizedCalendarEvent, Outlook, Yahoo, Google };
+export { CalendarEvent, NormalizedCalendarEvent, Google };
